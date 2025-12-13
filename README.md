@@ -44,7 +44,7 @@ Inspired by [Ruangguru](https://www.ruangguru.com/) 🇮🇩
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/Areeeyyy/StudySphere-vibe-code.git
+git clone https://github.com/Areeeyyy/StudySphere.git
 cd studysphere
 ```
 
