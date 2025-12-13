@@ -1,0 +1,80 @@
+.quick-access {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 1.5rem;
+}
+
+.quick-access-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+}
+
+.quick-access-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.quick-access-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    color: var(--gray-700);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+}
+
+.quick-access-item:hover {
+    background: var(--gray-100);
+    color: var(--primary-purple);
+}
+
+.quick-access-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--gray-500);
+}
+
+.quick-access-item:hover .quick-access-icon {
+    color: var(--primary-purple);
+}
+
+.daily-challenge {
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.daily-challenge-title {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 0.75rem;
+}
+
+.daily-challenge-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--primary-purple-bg);
+    border-radius: var(--radius-md);
+    color: var(--primary-purple);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.daily-challenge-btn:hover {
+    background: var(--primary-purple);
+    color: var(--white);
+}
+
+.daily-challenge-btn svg {
+    width: 20px;
+    height: 20px;
+}
