@@ -57,7 +57,7 @@ function Header() {
 
                             <div className="user-menu">
                                 <span className="user-name">{user?.full_name}</span>
-                                <div className="avatar-wrapper" onClick={handleLogout} title="Logout">
+                                <Link to="/profile" className="avatar-wrapper" title="Profile Settings">
                                     {user?.avatar_url ? (
                                         <img src={user.avatar_url} alt={user.full_name} className="avatar" />
                                     ) : (
@@ -65,7 +65,14 @@ function Header() {
                                             {user?.full_name?.charAt(0).toUpperCase()}
                                         </div>
                                     )}
-                                </div>
+                                </Link>
+                                <button className="icon-btn logout-btn" onClick={handleLogout} title="Logout">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                        <polyline points="16 17 21 12 16 7" />
+                                        <line x1="21" y1="12" x2="9" y2="12" />
+                                    </svg>
+                                </button>
                             </div>
                         </>
                     ) : (

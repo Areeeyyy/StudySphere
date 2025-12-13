@@ -148,6 +148,11 @@
     font-size: var(--font-size-sm);
 }
 
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
 @media (max-width: 768px) {
     .header-container {
         padding: 0.5rem 1rem;

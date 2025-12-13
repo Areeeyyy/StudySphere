@@ -10,6 +10,7 @@ import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import LessonPage from './pages/LessonPage';
 import QuizPage from './pages/QuizPage';
+import ProfilePage from './pages/ProfilePage';
 import InstructorDashboardPage from './pages/InstructorDashboardPage';
 
 import './index.css';
@@ -47,6 +48,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />
