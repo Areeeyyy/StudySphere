@@ -126,21 +126,54 @@ function QuizPage() {
                         </p>
                     </div>
 
-                    {/* Previous Attempt Banner */}
-                    {previousAttempt && !result && (
-                        <div className={`attempt-banner ${previousAttempt.passed ? 'passed' : 'failed'}`}>
-                            <div className="attempt-info">
-                                <span className="attempt-icon">{previousAttempt.passed ? '✅' : '❌'}</span>
-                                <div>
-                                    <strong>Previous Attempt: {previousAttempt.score}%</strong>
-                                    <p>{previousAttempt.passed ? 'You passed this quiz!' : 'You did not pass. Try again!'}</p>
+                    {/* Previous Attempt Screen - Show before quiz starts */}
+                    {previousAttempt && !result && Object.keys(answers).length === 0 ? (
+                        <div className="previous-attempt-screen">
+                            <div className={`previous-score-card ${previousAttempt.passed ? 'passed' : 'failed'}`}>
+                                <div className="previous-icon">
+                                    {previousAttempt.passed ? '✅' : '📝'}
+                                </div>
+                                <h2>You've Already Taken This Quiz</h2>
+                                <div className="previous-score">
+                                    <span className="score-value">{previousAttempt.score}%</span>
+                                    <span className="score-label">Your Score</span>
+                                </div>
+                                {previousAttempt.passed ? (
+                                    <p className="previous-message success">
+                                        🎉 Congratulations! You passed this quiz!
+                                    </p>
+                                ) : (
+                                    <p className="previous-message fail">
+                                        You scored below {quiz.passing_score}%. Would you like to try again?
+                                    </p>
+                                )}
+                                <p className="attempt-date">
+                                    Completed on: {new Date(previousAttempt.completed_at).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                </p>
+                                <div className="previous-actions">
+                                    <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                                        </svg>
+                                        Back to Lesson
+                                    </button>
+                                    <button className="btn btn-primary" onClick={() => setAnswers({ _started: true })}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <polyline points="1 4 1 10 7 10" />
+                                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                                        </svg>
+                                        {previousAttempt.passed ? 'Retake Quiz' : 'Try Again'}
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    )}
-
-                    {/* Result Screen */}
-                    {result ? (
+                    ) : result ? (
                         <div className="quiz-result">
                             <div className={`result-card ${result.passed ? 'passed' : 'failed'}`}>
                                 <div className="result-icon">

@@ -62,44 +62,114 @@
     color: var(--gray-300);
 }
 
-/* Attempt Banner */
-.attempt-banner {
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-lg);
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
+/* Previous Attempt Screen */
+.previous-attempt-screen {
+    text-align: center;
 }
 
-.attempt-banner.passed {
-    background: rgba(20, 184, 166, 0.1);
-    border: 1px solid var(--accent-teal);
+.previous-score-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow-md);
 }
 
-.attempt-banner.failed {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid #ef4444;
+.previous-score-card.passed {
+    border: 2px solid var(--accent-teal);
 }
 
-.attempt-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+.previous-score-card.failed {
+    border: 2px solid #f59e0b;
 }
 
-.attempt-icon {
-    font-size: 1.5rem;
+.previous-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
 }
 
-.attempt-info strong {
-    display: block;
+.previous-score-card h2 {
+    font-size: var(--font-size-xl);
     color: var(--gray-900);
+    margin-bottom: 1.5rem;
 }
 
-.attempt-info p {
-    color: var(--gray-600);
+.previous-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.previous-score .score-value {
+    font-size: 4rem;
+    font-weight: 700;
+    background: var(--gradient-purple);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.previous-score-card.passed .score-value {
+    background: linear-gradient(135deg, var(--accent-teal), #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.previous-score-card.failed .score-value {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.previous-score .score-label {
     font-size: var(--font-size-sm);
-    margin: 0;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.previous-message {
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.previous-message.success {
+    background: rgba(20, 184, 166, 0.1);
+    color: var(--accent-teal);
+}
+
+.previous-message.fail {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+}
+
+.attempt-date {
+    color: var(--gray-500);
+    font-size: var(--font-size-sm);
+    margin-bottom: 2rem;
+}
+
+.previous-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.previous-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.previous-actions svg {
+    width: 18px;
+    height: 18px;
 }
 
 /* Question Cards */
