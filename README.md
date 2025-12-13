@@ -249,4 +249,8 @@ Made with ❤️ for **Pemrograman Web** course
 
 **Semester 5 - 2024/2025**
 
+---
+
+<sub>Built with assistance from [Antigravity](https://github.com/google-deepmind) & Claude Opus 4</sub>
+
 </div>
