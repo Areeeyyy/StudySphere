@@ -44,7 +44,7 @@ Inspired by [Ruangguru](https://www.ruangguru.com/) 🇮🇩
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/studysphere.git
+git clone https://github.com/Areeeyyy/StudySphere-vibe-code.git
 cd studysphere
 ```
 
@@ -251,6 +251,6 @@ Made with ❤️ for **Pemrograman Web** course
 
 ---
 
-<sub>Built with assistance from [Antigravity](https://github.com/google-deepmind) & Claude Opus 4</sub>
+<sub>Built with assistance from [Antigravity](https://github.com/google-deepmind) & Claude Opus 4.5</sub>
 
 </div>
