@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎓 StudySphere
+# StudySphere
 
 ### E-Learning Platform
 
@@ -11,29 +11,29 @@
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
 A modern, full-stack e-learning platform built with the **PERN stack** (PostgreSQL, Express, React, Node.js).  
-Inspired by [Ruangguru](https://www.ruangguru.com/) 🇮🇩
+Inspired by [Ruangguru](https://www.ruangguru.com/)
 
-[Features](#-features) • [Installation](#-installation) • [API Documentation](#-api-endpoints) • [Tech Stack](#-tech-stack)
+[Features](#features) • [Installation](#installation) • [API Documentation](#api-endpoints) • [Tech Stack](#tech-stack)
 
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 🔐 **Authentication** | JWT-based login/registration with role support (Student/Instructor) |
-| 📚 **Course Catalog** | Browse courses with filters, search, and pagination |
-| 📝 **Enrollment System** | Students can enroll in courses and track progress |
-| 📊 **Progress Tracking** | Visual progress bars for lessons and course completion |
-| ❓ **Quiz Engine** | Server-side graded quizzes (answers never exposed to client) |
-| 🏆 **Achievements** | Badge system for gamification |
-| 📱 **Responsive Design** | Works seamlessly on desktop and mobile |
+| **Authentication** | JWT-based login/registration with role support (Student/Instructor) |
+| **Course Catalog** | Browse courses with filters, search, and pagination |
+| **Enrollment System** | Students can enroll in courses and track progress |
+| **Progress Tracking** | Visual progress bars for lessons and course completion |
+| **Quiz Engine** | Server-side graded quizzes (answers never exposed to client) |
+| **Achievements** | Badge system for gamification |
+| **Responsive Design** | Works seamlessly on desktop and mobile |
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
@@ -41,14 +41,14 @@ Inspired by [Ruangguru](https://www.ruangguru.com/) 🇮🇩
 - **PostgreSQL** v14 or higher
 - **npm** or **yarn**
 
-### 1️⃣ Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Areeeyyy/StudySphere.git
 cd studysphere
 ```
 
-### 2️⃣ Database Setup
+### 2. Database Setup
 
 ```bash
 # Create the database
@@ -61,7 +61,7 @@ sudo -u postgres psql -d diploma_lms -f server/schema.sql
 sudo -u postgres psql -d diploma_lms -f server/seed.sql
 ```
 
-### 3️⃣ Backend Setup
+### 3. Backend Setup
 
 ```bash
 cd server
@@ -77,9 +77,9 @@ cp .env.example .env
 npm start
 ```
 
-> 🟢 API running at `http://localhost:5000`
+> API running at `http://localhost:5000`
 
-### 4️⃣ Frontend Setup
+### 4. Frontend Setup
 
 ```bash
 cd client
@@ -91,15 +91,15 @@ npm install
 npm run dev
 ```
 
-> 🟢 App running at `http://localhost:5173`
+> App running at `http://localhost:5173`
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 studysphere/
-├── 📂 server/                  # Express.js Backend
+├── server/                     # Express.js Backend
 │   ├── config/db.js            # PostgreSQL connection pool
 │   ├── middleware/auth.js      # JWT verification middleware
 │   ├── routes/
@@ -112,7 +112,7 @@ studysphere/
 │   ├── .env.example            # Environment template
 │   └── index.js                # Server entry point
 │
-└── 📂 client/                  # React Frontend (Vite)
+└── client/                     # React Frontend (Vite)
     ├── src/
     │   ├── components/         # Reusable UI components
     │   ├── pages/              # Route pages
@@ -124,36 +124,36 @@ studysphere/
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### Authentication
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| `POST` | `/api/auth/register` | Create new account | ❌ |
-| `POST` | `/api/auth/login` | Login and get JWT | ❌ |
-| `GET` | `/api/auth/me` | Get current user | ✅ |
+| `POST` | `/api/auth/register` | Create new account | No |
+| `POST` | `/api/auth/login` | Login and get JWT | No |
+| `GET` | `/api/auth/me` | Get current user | Yes |
 
 ### Courses
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| `GET` | `/api/courses` | List all courses | ❌ |
-| `GET` | `/api/courses/:id` | Get course with lessons | ❌ |
-| `POST` | `/api/courses` | Create course | 🔒 Instructor |
-| `POST` | `/api/courses/:id/enroll` | Enroll in course | ✅ |
-| `GET` | `/api/courses/enrolled` | Get enrolled courses | ✅ |
+| `GET` | `/api/courses` | List all courses | No |
+| `GET` | `/api/courses/:id` | Get course with lessons | No |
+| `POST` | `/api/courses` | Create course | Instructor |
+| `POST` | `/api/courses/:id/enroll` | Enroll in course | Yes |
+| `GET` | `/api/courses/enrolled` | Get enrolled courses | Yes |
 
 ### Quiz
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| `GET` | `/api/quiz/:id` | Get quiz questions | ✅ |
-| `POST` | `/api/quiz/:id/submit` | Submit & grade quiz | ✅ |
+| `GET` | `/api/quiz/:id` | Get quiz questions | Yes |
+| `POST` | `/api/quiz/:id/submit` | Submit & grade quiz | Yes |
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 <table>
 <tr>
@@ -213,7 +213,7 @@ ESLint
 
 ---
 
-## 🎨 Design System
+## Design System
 
 The UI follows a custom **StudySphere Design System** with:
 
@@ -225,7 +225,7 @@ The UI follows a custom **StudySphere Design System** with:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -237,7 +237,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📝 License
+## License
 
 This project is for **educational purposes** as part of Web Programming coursework.
 
@@ -245,7 +245,7 @@ This project is for **educational purposes** as part of Web Programming coursewo
 
 <div align="center">
 
-Made with ❤️ for **Pemrograman Web** course
+Made with love for **Pemrograman Web** course
 
 **Semester 5 - 2024/2025**
 
