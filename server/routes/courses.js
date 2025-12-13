@@ -1,8 +1,64 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const pool = require('../config/db');
 const { verifyToken, isInstructor, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
+
+// Configure multer for thumbnail uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = path.join(__dirname, '../uploads/thumbnails');
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'course-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif|webp/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (extname && mimetype) {
+            return cb(null, true);
+        }
+        cb(new Error('Only image files are allowed!'));
+    }
+});
+
+// GET /api/courses/my-courses - Get instructor's own courses
+router.get('/my-courses', verifyToken, isInstructor, async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT c.*, u.full_name as instructor_name,
+                   COUNT(DISTINCT l.id) as lesson_count,
+                   COUNT(DISTINCT e.id) as enrollment_count
+            FROM courses c
+            LEFT JOIN users u ON c.instructor_id = u.id
+            LEFT JOIN lessons l ON c.id = l.course_id
+            LEFT JOIN enrollments e ON c.id = e.course_id
+            WHERE c.instructor_id = $1
+            GROUP BY c.id, u.full_name
+            ORDER BY c.created_at DESC
+        `, [req.user.id]);
+
+        res.json({ courses: result.rows });
+    } catch (err) {
+        console.error('Get my courses error:', err);
+        res.status(500).json({ error: 'Failed to get courses.' });
+    }
+});
 
 // GET /api/courses - Get all published courses
 router.get('/', optionalAuth, async (req, res) => {
@@ -129,13 +185,31 @@ router.get('/:id', optionalAuth, async (req, res) => {
 
         const course = courseResult.rows[0];
 
-        // Get lessons
-        const lessonsResult = await pool.query(`
-      SELECT id, title, duration_minutes, order_index
-      FROM lessons
-      WHERE course_id = $1
-      ORDER BY order_index ASC
-    `, [id]);
+        // Get lessons with completion status if user is authenticated
+        let lessonsQuery;
+        let lessonsParams;
+
+        if (req.user) {
+            lessonsQuery = `
+                SELECT l.id, l.title, l.duration_minutes, l.order_index,
+                       COALESCE(ulp.completed, false) as is_completed
+                FROM lessons l
+                LEFT JOIN user_lesson_progress ulp ON l.id = ulp.lesson_id AND ulp.user_id = $2
+                WHERE l.course_id = $1
+                ORDER BY l.order_index ASC
+            `;
+            lessonsParams = [id, req.user.id];
+        } else {
+            lessonsQuery = `
+                SELECT id, title, duration_minutes, order_index, false as is_completed
+                FROM lessons
+                WHERE course_id = $1
+                ORDER BY order_index ASC
+            `;
+            lessonsParams = [id];
+        }
+
+        const lessonsResult = await pool.query(lessonsQuery, lessonsParams);
 
         // Check if user is enrolled (if authenticated)
         let isEnrolled = false;
@@ -318,13 +392,15 @@ router.get('/:courseId/lessons/:lessonId', verifyToken, async (req, res) => {
             return res.status(403).json({ error: 'You must be enrolled in this course to view lessons.' });
         }
 
-        // Get lesson
+        // Get lesson with completion status
         const lessonResult = await pool.query(`
-      SELECT l.*, 
-             (SELECT id FROM quizzes WHERE lesson_id = l.id LIMIT 1) as quiz_id
-      FROM lessons l
-      WHERE l.id = $1 AND l.course_id = $2
-    `, [lessonId, courseId]);
+            SELECT l.*, 
+                   (SELECT id FROM quizzes WHERE lesson_id = l.id LIMIT 1) as quiz_id,
+                   COALESCE(ulp.completed, false) as is_completed
+            FROM lessons l
+            LEFT JOIN user_lesson_progress ulp ON l.id = ulp.lesson_id AND ulp.user_id = $3
+            WHERE l.id = $1 AND l.course_id = $2
+        `, [lessonId, courseId, req.user.id]);
 
         if (lessonResult.rows.length === 0) {
             return res.status(404).json({ error: 'Lesson not found.' });
@@ -332,10 +408,10 @@ router.get('/:courseId/lessons/:lessonId', verifyToken, async (req, res) => {
 
         // Check/create lesson progress
         await pool.query(`
-      INSERT INTO user_lesson_progress (user_id, lesson_id)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id, lesson_id) DO NOTHING
-    `, [req.user.id, lessonId]);
+            INSERT INTO user_lesson_progress (user_id, lesson_id)
+            VALUES ($1, $2)
+            ON CONFLICT (user_id, lesson_id) DO NOTHING
+        `, [req.user.id, lessonId]);
 
         res.json({ lesson: lessonResult.rows[0] });
     } catch (err) {
@@ -381,6 +457,220 @@ router.post('/:courseId/lessons/:lessonId/complete', verifyToken, async (req, re
     } catch (err) {
         console.error('Complete lesson error:', err);
         res.status(500).json({ error: 'Failed to mark lesson complete.' });
+    }
+});
+
+// DELETE /api/courses/:id - Delete a course (Instructor only)
+router.delete('/:id', verifyToken, isInstructor, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check ownership
+        const ownerCheck = await pool.query(
+            'SELECT instructor_id, thumbnail_url FROM courses WHERE id = $1',
+            [id]
+        );
+
+        if (ownerCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+
+        if (ownerCheck.rows[0].instructor_id !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You can only delete your own courses.' });
+        }
+
+        // Delete thumbnail file if exists
+        const thumbnailUrl = ownerCheck.rows[0].thumbnail_url;
+        if (thumbnailUrl && thumbnailUrl.startsWith('/uploads/')) {
+            const filePath = path.join(__dirname, '..', thumbnailUrl);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+
+        // Delete course (cascades to lessons, enrollments, etc.)
+        await pool.query('DELETE FROM courses WHERE id = $1', [id]);
+
+        res.json({ message: 'Course deleted successfully.' });
+    } catch (err) {
+        console.error('Delete course error:', err);
+        res.status(500).json({ error: 'Failed to delete course.' });
+    }
+});
+
+// POST /api/courses/:id/thumbnail - Upload course thumbnail (Instructor only)
+router.post('/:id/thumbnail', verifyToken, isInstructor, upload.single('thumbnail'), async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check ownership
+        const ownerCheck = await pool.query(
+            'SELECT instructor_id, thumbnail_url FROM courses WHERE id = $1',
+            [id]
+        );
+
+        if (ownerCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+
+        if (ownerCheck.rows[0].instructor_id !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You can only update your own courses.' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded.' });
+        }
+
+        // Delete old thumbnail if exists
+        const oldThumbnail = ownerCheck.rows[0].thumbnail_url;
+        if (oldThumbnail && oldThumbnail.startsWith('/uploads/')) {
+            const oldPath = path.join(__dirname, '..', oldThumbnail);
+            if (fs.existsSync(oldPath)) {
+                fs.unlinkSync(oldPath);
+            }
+        }
+
+        // Update course with new thumbnail URL
+        const thumbnailUrl = '/uploads/thumbnails/' + req.file.filename;
+        const result = await pool.query(
+            'UPDATE courses SET thumbnail_url = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+            [thumbnailUrl, id]
+        );
+
+        res.json({ course: result.rows[0], thumbnail_url: thumbnailUrl });
+    } catch (err) {
+        console.error('Upload thumbnail error:', err);
+        res.status(500).json({ error: 'Failed to upload thumbnail.' });
+    }
+});
+
+// GET /api/courses/:id/lessons - Get all lessons for a course (Instructor management)
+router.get('/:id/lessons', verifyToken, isInstructor, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check ownership
+        const ownerCheck = await pool.query(
+            'SELECT instructor_id FROM courses WHERE id = $1',
+            [id]
+        );
+
+        if (ownerCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+
+        if (ownerCheck.rows[0].instructor_id !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You can only view lessons of your own courses.' });
+        }
+
+        const result = await pool.query(`
+            SELECT l.*, 
+                   (SELECT COUNT(*) FROM quizzes WHERE lesson_id = l.id) as quiz_count
+            FROM lessons l
+            WHERE l.course_id = $1
+            ORDER BY l.order_index ASC
+        `, [id]);
+
+        res.json({ lessons: result.rows });
+    } catch (err) {
+        console.error('Get course lessons error:', err);
+        res.status(500).json({ error: 'Failed to get lessons.' });
+    }
+});
+
+// PUT /api/courses/:courseId/lessons/:lessonId - Update a lesson (Instructor only)
+router.put('/:courseId/lessons/:lessonId', verifyToken, isInstructor, async (req, res) => {
+    try {
+        const { courseId, lessonId } = req.params;
+        const { title, content, video_url, duration_minutes, order_index } = req.body;
+
+        // Check ownership
+        const ownerCheck = await pool.query(
+            'SELECT instructor_id FROM courses WHERE id = $1',
+            [courseId]
+        );
+
+        if (ownerCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+
+        if (ownerCheck.rows[0].instructor_id !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You can only edit lessons in your own courses.' });
+        }
+
+        // Check lesson exists
+        const lessonCheck = await pool.query(
+            'SELECT id FROM lessons WHERE id = $1 AND course_id = $2',
+            [lessonId, courseId]
+        );
+
+        if (lessonCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Lesson not found.' });
+        }
+
+        const result = await pool.query(`
+            UPDATE lessons 
+            SET title = COALESCE($1, title),
+                content = COALESCE($2, content),
+                video_url = COALESCE($3, video_url),
+                duration_minutes = COALESCE($4, duration_minutes),
+                order_index = COALESCE($5, order_index)
+            WHERE id = $6
+            RETURNING *
+        `, [title, content, video_url, duration_minutes, order_index, lessonId]);
+
+        res.json({ lesson: result.rows[0] });
+    } catch (err) {
+        console.error('Update lesson error:', err);
+        res.status(500).json({ error: 'Failed to update lesson.' });
+    }
+});
+
+// DELETE /api/courses/:courseId/lessons/:lessonId - Delete a lesson (Instructor only)
+router.delete('/:courseId/lessons/:lessonId', verifyToken, isInstructor, async (req, res) => {
+    try {
+        const { courseId, lessonId } = req.params;
+
+        // Check ownership
+        const ownerCheck = await pool.query(
+            'SELECT instructor_id FROM courses WHERE id = $1',
+            [courseId]
+        );
+
+        if (ownerCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+
+        if (ownerCheck.rows[0].instructor_id !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You can only delete lessons in your own courses.' });
+        }
+
+        // Check lesson exists
+        const lessonCheck = await pool.query(
+            'SELECT id, order_index FROM lessons WHERE id = $1 AND course_id = $2',
+            [lessonId, courseId]
+        );
+
+        if (lessonCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Lesson not found.' });
+        }
+
+        const deletedOrderIndex = lessonCheck.rows[0].order_index;
+
+        // Delete the lesson
+        await pool.query('DELETE FROM lessons WHERE id = $1', [lessonId]);
+
+        // Reorder remaining lessons
+        await pool.query(`
+            UPDATE lessons 
+            SET order_index = order_index - 1 
+            WHERE course_id = $1 AND order_index > $2
+        `, [courseId, deletedOrderIndex]);
+
+        res.json({ message: 'Lesson deleted successfully.' });
+    } catch (err) {
+        console.error('Delete lesson error:', err);
+        res.status(500).json({ error: 'Failed to delete lesson.' });
     }
 });
 

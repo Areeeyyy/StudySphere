@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import './Header.css';
 
 function Header() {
-    const { user, isAuthenticated, logout } = useAuth();
+    const { user, isAuthenticated, isInstructor, logout } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -31,6 +31,15 @@ function Header() {
                         <>
                             <Link to="/courses" className="nav-link">Courses</Link>
                             <Link to="/dashboard" className="nav-link">My Learning</Link>
+                            {isInstructor && (
+                                <Link to="/instructor" className="nav-link nav-link-instructor">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                    </svg>
+                                    Instructor
+                                </Link>
+                            )}
 
                             <div className="header-icons">
                                 <button className="icon-btn" title="Notifications">
@@ -72,3 +81,4 @@ function Header() {
 }
 
 export default Header;
+

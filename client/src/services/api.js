@@ -44,11 +44,23 @@ export const coursesAPI = {
     getAll: (params) => api.get('/courses', { params }),
     getOne: (id) => api.get(`/courses/${id}`),
     getEnrolled: () => api.get('/courses/enrolled'),
+    getMyCourses: () => api.get('/courses/my-courses'),
     enroll: (id) => api.post(`/courses/${id}/enroll`),
     create: (data) => api.post('/courses', data),
     update: (id, data) => api.put(`/courses/${id}`, data),
+    delete: (id) => api.delete(`/courses/${id}`),
+    uploadThumbnail: (id, file) => {
+        const formData = new FormData();
+        formData.append('thumbnail', file);
+        return api.post(`/courses/${id}/thumbnail`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+    },
+    getCourseLessons: (courseId) => api.get(`/courses/${courseId}/lessons`),
     addLesson: (courseId, data) => api.post(`/courses/${courseId}/lessons`, data),
     getLesson: (courseId, lessonId) => api.get(`/courses/${courseId}/lessons/${lessonId}`),
+    updateLesson: (courseId, lessonId, data) => api.put(`/courses/${courseId}/lessons/${lessonId}`, data),
+    deleteLesson: (courseId, lessonId) => api.delete(`/courses/${courseId}/lessons/${lessonId}`),
     completeLesson: (courseId, lessonId) => api.post(`/courses/${courseId}/lessons/${lessonId}/complete`),
 };
 

@@ -8,6 +8,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
+import LessonPage from './pages/LessonPage';
+import InstructorDashboardPage from './pages/InstructorDashboardPage';
 
 import './index.css';
 
@@ -24,10 +26,26 @@ function App() {
 
           {/* Protected Routes */}
           <Route
+            path="/courses/:courseId/lessons/:lessonId"
+            element={
+              <ProtectedRoute>
+                <LessonPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/instructor"
+            element={
+              <ProtectedRoute>
+                <InstructorDashboardPage />
               </ProtectedRoute>
             }
           />
