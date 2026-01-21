@@ -87,4 +87,10 @@ export const counterAPI = {
     increment: () => api.post('/counter/increment'),
 };
 
+// Contact API (Form Online)
+export const contactAPI = {
+    submit: (data) => api.post('/contact', data),
+    getAll: () => api.get('/contact'),
+};
+
 export default api;

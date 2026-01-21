@@ -176,3 +176,14 @@ CREATE TABLE IF NOT EXISTS site_visits (
 
 -- Initialize counter with 0
 INSERT INTO site_visits (id, count) VALUES (1, 0) ON CONFLICT DO NOTHING;
+
+-- Contact Messages table (form online)
+CREATE TABLE IF NOT EXISTS contact_messages (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    subject VARCHAR(255),
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN DEFAULT FALSE
+);

@@ -31,6 +31,7 @@ function Header() {
                         <>
                             <Link to="/courses" className="nav-link">Courses</Link>
                             <Link to="/dashboard" className="nav-link">My Learning</Link>
+                            <Link to="/contact" className="nav-link">Contact</Link>
                             {isInstructor && (
                                 <Link to="/instructor" className="nav-link nav-link-instructor">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -77,6 +78,7 @@ function Header() {
                         </>
                     ) : (
                         <>
+                            <Link to="/contact" className="nav-link">Contact</Link>
                             <Link to="/login" className="btn btn-secondary">Login</Link>
                             <Link to="/register" className="btn btn-primary">Sign Up</Link>
                         </>
