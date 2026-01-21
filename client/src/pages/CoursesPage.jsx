@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { coursesAPI } from '../services/api';
 import Header from '../components/Header';
 import CourseCard from '../components/CourseCard';
+import VisitorCounter from '../components/VisitorCounter';
 import './CoursesPage.css';
 
 function CoursesPage() {
@@ -187,6 +188,10 @@ function CoursesPage() {
                     </div>
                 </div>
             </main>
+
+            <footer className="courses-footer">
+                <VisitorCounter />
+            </footer>
         </div>
     );
 }

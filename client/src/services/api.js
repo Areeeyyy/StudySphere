@@ -81,4 +81,10 @@ export const usersAPI = {
     sendMessage: (data) => api.post('/users/messages', data),
 };
 
+// Counter API (Visitor Counter)
+export const counterAPI = {
+    getCount: () => api.get('/counter'),
+    increment: () => api.post('/counter/increment'),
+};
+
 export default api;

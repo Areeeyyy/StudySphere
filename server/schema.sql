@@ -165,3 +165,14 @@ INSERT INTO achievements (name, description, icon_url, badge_type, points) VALUE
 ('Science Sage', 'Score 90%+ on Science quizzes', '/badges/science-sage.png', 'silver', 75),
 ('History Hero', 'Complete all History courses', '/badges/history-hero.png', 'gold', 150)
 ON CONFLICT DO NOTHING;
+
+-- Visitor Counter table (single row to track site visits)
+CREATE TABLE IF NOT EXISTS site_visits (
+    id INTEGER PRIMARY KEY DEFAULT 1,
+    count INTEGER DEFAULT 0,
+    last_visited TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT single_row CHECK (id = 1)
+);
+
+-- Initialize counter with 0
+INSERT INTO site_visits (id, count) VALUES (1, 0) ON CONFLICT DO NOTHING;

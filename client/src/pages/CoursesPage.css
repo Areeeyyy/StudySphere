@@ -178,3 +178,12 @@
         font-size: var(--font-size-2xl);
     }
 }
+
+/* Footer with Visitor Counter */
+.courses-footer {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1.5rem 3rem;
+    background: var(--gray-100);
+    margin-top: 2rem;
+}
