@@ -45,7 +45,7 @@ function DashboardPage() {
                             <div className="error-state">{error}</div>
                         ) : courses.length === 0 ? (
                             <div className="empty-state">
-                                <div className="empty-icon">📚</div>
+                                <div className="empty-icon"></div>
                                 <h3>No courses yet</h3>
                                 <p>Start your learning journey by exploring our course catalog!</p>
                                 <a href="/courses" className="btn btn-primary">Browse Courses</a>

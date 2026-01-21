@@ -10,6 +10,7 @@ const quizRoutes = require('./routes/quiz');
 const userRoutes = require('./routes/users');
 const counterRoutes = require('./routes/counter');
 const contactRoutes = require('./routes/contact');
+const guestbookRoutes = require('./routes/guestbook');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -32,6 +33,7 @@ app.use('/api/quiz', quizRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/counter', counterRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/guestbook', guestbookRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

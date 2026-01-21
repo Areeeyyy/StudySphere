@@ -187,3 +187,11 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_read BOOLEAN DEFAULT FALSE
 );
+
+-- Guestbook Entries table (buku tamu)
+CREATE TABLE IF NOT EXISTS guestbook_entries (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

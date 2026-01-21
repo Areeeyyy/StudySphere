@@ -170,14 +170,14 @@ function ProfilePage() {
                         {/* Stats Cards */}
                         <div className="stats-grid">
                             <div className="stat-card">
-                                <div className="stat-icon courses">📚</div>
+                                <div className="stat-icon courses"></div>
                                 <div className="stat-info">
                                     <span className="stat-value">{stats?.enrolled_courses || 0}</span>
                                     <span className="stat-label">Enrolled Courses</span>
                                 </div>
                             </div>
                             <div className="stat-card">
-                                <div className="stat-icon completed">✅</div>
+                                <div className="stat-icon completed"></div>
                                 <div className="stat-info">
                                     <span className="stat-value">{stats?.completed_courses || 0}</span>
                                     <span className="stat-label">Completed</span>
@@ -277,7 +277,7 @@ function ProfilePage() {
                                 <span>My Dashboard</span>
                             </button>
                             <button onClick={() => navigate('/courses')} className="link-card">
-                                <span className="link-icon">📚</span>
+                                <span className="link-icon"></span>
                                 <span>Browse Courses</span>
                             </button>
                             {(profile?.role === 'instructor' || profile?.role === 'admin') && (

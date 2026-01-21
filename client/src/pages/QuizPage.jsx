@@ -90,7 +90,7 @@ function QuizPage() {
                 <Header />
                 <div className="container">
                     <div className="quiz-error">
-                        <div className="error-icon">⚠️</div>
+                        <div className="error-icon">!</div>
                         <h2>Unable to Load Quiz</h2>
                         <p>{error}</p>
                         <button className="btn btn-primary" onClick={() => navigate(-1)}>
@@ -131,7 +131,7 @@ function QuizPage() {
                         <div className="previous-attempt-screen">
                             <div className={`previous-score-card ${previousAttempt.passed ? 'passed' : 'failed'}`}>
                                 <div className="previous-icon">
-                                    {previousAttempt.passed ? '✅' : '📝'}
+                                    {previousAttempt.passed ? 'Passed' : 'Attempted'}
                                 </div>
                                 <h2>You've Already Taken This Quiz</h2>
                                 <div className="previous-score">
@@ -140,7 +140,7 @@ function QuizPage() {
                                 </div>
                                 {previousAttempt.passed ? (
                                     <p className="previous-message success">
-                                        🎉 Congratulations! You passed this quiz!
+                                        Congratulations! You passed this quiz!
                                     </p>
                                 ) : (
                                     <p className="previous-message fail">
@@ -177,7 +177,7 @@ function QuizPage() {
                         <div className="quiz-result">
                             <div className={`result-card ${result.passed ? 'passed' : 'failed'}`}>
                                 <div className="result-icon">
-                                    {result.passed ? '🎉' : '😕'}
+                                    {result.passed ? '' : ''}
                                 </div>
                                 <h2>{result.passed ? 'Congratulations!' : 'Keep Trying!'}</h2>
                                 <div className="result-score">

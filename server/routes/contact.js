@@ -23,7 +23,7 @@ const sendEmailNotification = async (contactData) => {
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <div style="background: linear-gradient(135deg, #7c3aed, #5b21b6); padding: 20px; border-radius: 10px 10px 0 0;">
-                    <h2 style="color: white; margin: 0;">📩 New Contact Form Submission</h2>
+                    <h2 style="color: white; margin: 0;">New Contact Form Submission</h2>
                 </div>
                 <div style="background: #f9fafb; padding: 25px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px;">
                     <p><strong>From:</strong> ${name}</p>

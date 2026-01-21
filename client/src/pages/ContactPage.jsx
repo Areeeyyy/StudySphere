@@ -83,7 +83,7 @@ function ContactPage() {
 
                             {status.message && (
                                 <div className={`form-status ${status.type}`}>
-                                    {status.type === 'success' ? '✓' : '!'} {status.message}
+                                    {status.message}
                                 </div>
                             )}
 

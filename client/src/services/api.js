@@ -93,4 +93,10 @@ export const contactAPI = {
     getAll: () => api.get('/contact'),
 };
 
+// Guestbook API (Buku Tamu)
+export const guestbookAPI = {
+    getAll: () => api.get('/guestbook'),
+    addEntry: (data) => api.post('/guestbook', data),
+};
+
 export default api;

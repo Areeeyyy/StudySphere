@@ -108,7 +108,7 @@ function CourseDetailPage() {
                                     </div>
                                 )}
                                 <div className="course-hero-lessons">
-                                    📚 {lessons.length} lessons
+                                    {lessons.length} lessons
                                 </div>
                                 {course.difficulty && (
                                     <div className="course-hero-difficulty">
@@ -176,7 +176,7 @@ function CourseDetailPage() {
                             {isEnrolled ? (
                                 <>
                                     <div className="enrollment-status enrolled">
-                                        ✓ Enrolled
+                                        Enrolled
                                     </div>
                                     <div className="enrollment-progress">
                                         <div className="progress-label">Your Progress</div>

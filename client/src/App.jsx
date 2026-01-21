@@ -13,6 +13,7 @@ import QuizPage from './pages/QuizPage';
 import ProfilePage from './pages/ProfilePage';
 import InstructorDashboardPage from './pages/InstructorDashboardPage';
 import ContactPage from './pages/ContactPage';
+import GuestbookPage from './pages/GuestbookPage';
 
 import './index.css';
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:id" element={<CourseDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/guestbook" element={<GuestbookPage />} />
 
           {/* Protected Routes */}
           <Route

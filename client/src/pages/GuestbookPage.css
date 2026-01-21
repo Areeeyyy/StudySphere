@@ -1,0 +1,207 @@
+.guestbook-page {
+    min-height: 100vh;
+    background: var(--gray-50);
+}
+
+.guestbook-header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.guestbook-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+}
+
+.guestbook-subtitle {
+    font-size: 1.125rem;
+    color: var(--gray-600);
+}
+
+.guestbook-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    padding-bottom: 3rem;
+}
+
+/* Form Section */
+.guestbook-form-section {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.guestbook-form {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.guestbook-form h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 1.25rem;
+}
+
+.form-error {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
+    background: var(--gray-50);
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #7c3aed;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.char-count {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+}
+
+.guestbook-form .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Entries Section */
+.guestbook-entries-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+}
+
+.entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.entry-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.entry-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.entry-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.entry-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.entry-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.entry-name {
+    font-weight: 600;
+    color: var(--gray-800);
+    font-size: 0.9375rem;
+}
+
+.entry-date {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+.entry-message {
+    color: var(--gray-700);
+    line-height: 1.6;
+    font-size: 0.9375rem;
+    white-space: pre-wrap;
+}
+
+.loading-state {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 12px;
+    color: var(--gray-500);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .guestbook-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .guestbook-form-section {
+        position: static;
+    }
+
+    .guestbook-title {
+        font-size: 2rem;
+    }
+}
